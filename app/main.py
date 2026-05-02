@@ -28,4 +28,9 @@ customers.append(customer1)
 customers.append(customer2)
 customers.append(customer3)
 
-print(customers)
+
+def list_customers():
+    print(customers)
+
+
+list_customers()
