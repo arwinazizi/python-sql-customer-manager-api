@@ -30,7 +30,17 @@ customers.append(customer3)
 
 
 def list_customers():
-    print(customers)
+    return customers
 
 
-list_customers()
+def get_customer_by_id(customer_id):
+    for customer in customers:
+        if customer["id"] == customer_id:
+            return customer
+
+    return None
+
+
+print(list_customers())
+print(get_customer_by_id(2))
+print(get_customer_by_id(99))
