@@ -70,15 +70,19 @@ def update_customer(customer_id, name, email, phone, company):
     return None
 
 
-print(get_customer_by_id(2))
+def delete_customer(customer_id):
+    for customer in customers:
+        if customer["id"] == customer_id:
+            customers.remove(customer)
+            return customer
 
-updated_customer = update_customer(
-    2,
-    "Sara Andersson",
-    "sara.andersson@example.com",
-    "0701112222",
-    "Andersson Design"
-)
+    return None
 
-print(updated_customer)
+
+print(list_customers())
+
+deleted_customer = delete_customer(2)
+
+print(deleted_customer)
+print(list_customers())
 print(get_customer_by_id(2))
