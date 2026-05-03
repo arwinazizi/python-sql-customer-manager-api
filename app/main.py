@@ -41,6 +41,30 @@ def get_customer_by_id(customer_id):
     return None
 
 
+def create_customer(name, email, phone, company):
+    new_id = len(customers) + 1
+
+    new_customer = {
+        "id": new_id,
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "company": company
+    }
+
+    customers.append(new_customer)
+
+    return new_customer
+
+
 print(list_customers())
-print(get_customer_by_id(2))
-print(get_customer_by_id(99))
+
+created_customer = create_customer(
+    "Omar Karim",
+    "omar@example.com",
+    "0709999999",
+    "Omar Tech"
+)
+
+print(created_customer)
+print(list_customers())
