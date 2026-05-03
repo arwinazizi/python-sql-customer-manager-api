@@ -79,10 +79,21 @@ def delete_customer(customer_id):
     return None
 
 
-print(list_customers())
+def search_customers(search_term):
+    results = []
+    normalized_search_term = search_term.lower()
 
-deleted_customer = delete_customer(2)
+    for customer in customers:
+        name = customer["name"].lower()
+        email = customer["email"].lower()
+        company = customer["company"].lower()
 
-print(deleted_customer)
-print(list_customers())
-print(get_customer_by_id(2))
+        if normalized_search_term in name or normalized_search_term in email or normalized_search_term in company:
+            results.append(customer)
+
+    return results
+
+
+print(search_customers("ali"))
+print(search_customers("design"))
+print(search_customers("x"))
