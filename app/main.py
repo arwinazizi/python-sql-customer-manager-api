@@ -57,14 +57,28 @@ def create_customer(name, email, phone, company):
     return new_customer
 
 
-print(list_customers())
+def update_customer(customer_id, name, email, phone, company):
+    for customer in customers:
+        if customer["id"] == customer_id:
+            customer["name"] = name
+            customer["email"] = email
+            customer["phone"] = phone
+            customer["company"] = company
 
-created_customer = create_customer(
-    "Omar Karim",
-    "omar@example.com",
-    "0709999999",
-    "Omar Tech"
+            return customer
+
+    return None
+
+
+print(get_customer_by_id(2))
+
+updated_customer = update_customer(
+    2,
+    "Sara Andersson",
+    "sara.andersson@example.com",
+    "0701112222",
+    "Andersson Design"
 )
 
-print(created_customer)
-print(list_customers())
+print(updated_customer)
+print(get_customer_by_id(2))
