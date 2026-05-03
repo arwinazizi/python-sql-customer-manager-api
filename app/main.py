@@ -94,6 +94,32 @@ def search_customers(search_term):
     return results
 
 
-print(search_customers("ali"))
-print(search_customers("design"))
-print(search_customers("x"))
+if __name__ == "__main__":
+    print(list_customers())
+    print(get_customer_by_id(2))
+    print(search_customers("ali"))
+
+    created_customer = create_customer(
+        "Omar Karim",
+        "omar@example.com",
+        "0709999999",
+        "Omar Tech"
+    )
+
+    print(created_customer)
+    print(list_customers())
+
+    updated_customer = update_customer(
+        2,
+        "Sara Andersson",
+        "sara.andersson@example.com",
+        "0701112222",
+        "Andersson Design"
+    )
+
+    print(updated_customer)
+
+    deleted_customer = delete_customer(1)
+
+    print(deleted_customer)
+    print(list_customers())
