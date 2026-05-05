@@ -46,14 +46,39 @@ def create_customer(name, email, phone, company):
     return new_customer_id
 
 
+def get_all_customers():
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT id, name, email, phone, company, created_at
+        FROM customers
+    """)
+
+    rows = cursor.fetchall()
+
+    customers = []
+
+    for row in rows:
+        customer = {
+            "id": row[0],
+            "name": row[1],
+            "email": row[2],
+            "phone": row[3],
+            "company": row[4],
+            "created_at": row[5]
+        }
+
+        customers.append(customer)
+
+    connection.close()
+
+    return customers
+
+
 if __name__ == "__main__":
     create_customers_table()
 
-    customer_id = create_customer(
-        "Ali Hassan",
-        "ali@example.com",
-        "0701234567",
-        "Ali Consulting"
-    )
+    customers = get_all_customers()
 
-    print(f"Created customer with ID: {customer_id}")
+    print(customers)
