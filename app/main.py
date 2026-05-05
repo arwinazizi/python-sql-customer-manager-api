@@ -1,125 +1,18 @@
-customers = []
+from fastapi import FastAPI
 
-customer1 = {
-    "id": 1,
-    "name": "Ali Hassan",
-    "email": "ali@example.com",
-    "phone": "0701234567",
-    "company": "Ali Consulting"
-}
-
-customer2 = {
-    "id": 2,
-    "name": "Sara Ahmed",
-    "email": "sara@example.com",
-    "phone": "0707654321",
-    "company": "Sara Design"
-}
-
-customer3 = {
-    "id": 3,
-    "name": "Lina Josef",
-    "email": "lina@example.com",
-    "phone": "0707454321",
-    "company": "Lina AI"
-}
-
-customers.append(customer1)
-customers.append(customer2)
-customers.append(customer3)
+from app.database import create_customers_table
 
 
-def list_customers():
-    return customers
+app = FastAPI()
 
 
-def get_customer_by_id(customer_id):
-    for customer in customers:
-        if customer["id"] == customer_id:
-            return customer
-
-    return None
+@app.on_event("startup")
+def startup():
+    create_customers_table()
 
 
-def create_customer(name, email, phone, company):
-    new_id = len(customers) + 1
-
-    new_customer = {
-        "id": new_id,
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "company": company
+@app.get("/")
+def root():
+    return {
+        "message": "Python SQL Customer Manager API"
     }
-
-    customers.append(new_customer)
-
-    return new_customer
-
-
-def update_customer(customer_id, name, email, phone, company):
-    for customer in customers:
-        if customer["id"] == customer_id:
-            customer["name"] = name
-            customer["email"] = email
-            customer["phone"] = phone
-            customer["company"] = company
-
-            return customer
-
-    return None
-
-
-def delete_customer(customer_id):
-    for customer in customers:
-        if customer["id"] == customer_id:
-            customers.remove(customer)
-            return customer
-
-    return None
-
-
-def search_customers(search_term):
-    results = []
-    normalized_search_term = search_term.lower()
-
-    for customer in customers:
-        name = customer["name"].lower()
-        email = customer["email"].lower()
-        company = customer["company"].lower()
-
-        if normalized_search_term in name or normalized_search_term in email or normalized_search_term in company:
-            results.append(customer)
-
-    return results
-
-
-if __name__ == "__main__":
-    print(list_customers())
-    print(get_customer_by_id(2))
-    print(search_customers("ali"))
-
-    created_customer = create_customer(
-        "Omar Karim",
-        "omar@example.com",
-        "0709999999",
-        "Omar Tech"
-    )
-
-    print(created_customer)
-    print(list_customers())
-
-    updated_customer = update_customer(
-        2,
-        "Sara Andersson",
-        "sara.andersson@example.com",
-        "0701112222",
-        "Andersson Design"
-    )
-
-    print(updated_customer)
-
-    deleted_customer = delete_customer(1)
-
-    print(deleted_customer)
-    print(list_customers())
