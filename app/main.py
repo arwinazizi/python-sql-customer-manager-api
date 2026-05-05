@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.database import create_customers_table
+from app.database import create_customers_table, get_all_customers
 
 
 app = FastAPI()
@@ -16,3 +16,9 @@ def root():
     return {
         "message": "Python SQL Customer Manager API"
     }
+
+
+@app.get("/customers")
+def list_customers():
+    customers = get_all_customers()
+    return customers
