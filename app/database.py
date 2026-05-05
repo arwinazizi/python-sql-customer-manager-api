@@ -143,17 +143,36 @@ def delete_customer(customer_id):
     return customer
 
 
+def search_customers(search_term):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    search_pattern = f"%{search_term}%"
+
+    cursor.execute("""
+        SELECT id, name, email, phone, company, created_at
+        FROM customers
+        WHERE name LIKE ?
+           OR email LIKE ?
+           OR company LIKE ?
+    """, (search_pattern, search_pattern, search_pattern))
+
+    rows = cursor.fetchall()
+
+    customers = []
+
+    for row in rows:
+        customer = row_to_customer(row)
+        customers.append(customer)
+
+    connection.close()
+
+    return customers
+
+
 if __name__ == "__main__":
     create_customers_table()
 
-    new_customer_id = create_customer(
-        "Delete Test",
-        "delete.test@example.com",
-        "0704444444",
-        "Delete Company"
-    )
+    results = search_customers("ali")
 
-    deleted_customer = delete_customer(new_customer_id)
-
-    print(deleted_customer)
-    print(get_customer_by_id(new_customer_id))
+    print(results)
