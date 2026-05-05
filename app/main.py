@@ -2,9 +2,11 @@ from fastapi import FastAPI, HTTPException
 
 from app.database import (
     create_customers_table,
+    create_customer,
     get_all_customers,
     get_customer_by_id
 )
+from app.schemas import CustomerCreate
 
 
 app = FastAPI()
@@ -36,3 +38,17 @@ def get_customer(customer_id: int):
         raise HTTPException(status_code=404, detail="Customer not found")
 
     return customer
+
+
+@app.post("/customers", status_code=201)
+def create_customer_endpoint(customer: CustomerCreate):
+    new_customer_id = create_customer(
+        customer.name,
+        customer.email,
+        customer.phone,
+        customer.company
+    )
+
+    new_customer = get_customer_by_id(new_customer_id)
+
+    return new_customer
