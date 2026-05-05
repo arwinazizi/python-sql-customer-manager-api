@@ -123,15 +123,37 @@ def update_customer(customer_id, name, email, phone, company):
     return get_customer_by_id(customer_id)
 
 
+def delete_customer(customer_id):
+    customer = get_customer_by_id(customer_id)
+
+    if customer is None:
+        return None
+
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        DELETE FROM customers
+        WHERE id = ?
+    """, (customer_id,))
+
+    connection.commit()
+    connection.close()
+
+    return customer
+
+
 if __name__ == "__main__":
     create_customers_table()
 
-    updated_customer = update_customer(
-        1,
-        "Ali Updated",
-        "ali.updated@example.com",
-        "0701111111",
-        "Updated Consulting"
+    new_customer_id = create_customer(
+        "Delete Test",
+        "delete.test@example.com",
+        "0704444444",
+        "Delete Company"
     )
 
-    print(updated_customer)
+    deleted_customer = delete_customer(new_customer_id)
+
+    print(deleted_customer)
+    print(get_customer_by_id(new_customer_id))
