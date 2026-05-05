@@ -28,6 +28,32 @@ def create_customers_table():
     connection.close()
 
 
+def create_customer(name, email, phone, company):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO customers (name, email, phone, company)
+        VALUES (?, ?, ?, ?)
+    """, (name, email, phone, company))
+
+    connection.commit()
+
+    new_customer_id = cursor.lastrowid
+
+    connection.close()
+
+    return new_customer_id
+
+
 if __name__ == "__main__":
     create_customers_table()
-    print("Customers table created successfully.")
+
+    customer_id = create_customer(
+        "Ali Hassan",
+        "ali@example.com",
+        "0701234567",
+        "Ali Consulting"
+    )
+
+    print(f"Created customer with ID: {customer_id}")
