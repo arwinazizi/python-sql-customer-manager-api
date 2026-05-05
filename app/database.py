@@ -9,6 +9,19 @@ def create_connection():
     return connection
 
 
+def row_to_customer(row):
+    customer = {
+        "id": row[0],
+        "name": row[1],
+        "email": row[2],
+        "phone": row[3],
+        "company": row[4],
+        "created_at": row[5]
+    }
+
+    return customer
+
+
 def create_customers_table():
     connection = create_connection()
     cursor = connection.cursor()
@@ -60,15 +73,7 @@ def get_all_customers():
     customers = []
 
     for row in rows:
-        customer = {
-            "id": row[0],
-            "name": row[1],
-            "email": row[2],
-            "phone": row[3],
-            "company": row[4],
-            "created_at": row[5]
-        }
-
+        customer = row_to_customer(row)
         customers.append(customer)
 
     connection.close()
@@ -76,9 +81,29 @@ def get_all_customers():
     return customers
 
 
+def get_customer_by_id(customer_id):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT id, name, email, phone, company, created_at
+        FROM customers
+        WHERE id = ?
+    """, (customer_id,))
+
+    row = cursor.fetchone()
+
+    connection.close()
+
+    if row is None:
+        return None
+
+    return row_to_customer(row)
+
+
 if __name__ == "__main__":
     create_customers_table()
 
-    customers = get_all_customers()
+    customer = get_customer_by_id(1)
 
-    print(customers)
+    print(customer)
