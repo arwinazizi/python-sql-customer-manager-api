@@ -101,9 +101,37 @@ def get_customer_by_id(customer_id):
     return row_to_customer(row)
 
 
+def update_customer(customer_id, name, email, phone, company):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        UPDATE customers
+        SET name = ?, email = ?, phone = ?, company = ?
+        WHERE id = ?
+    """, (name, email, phone, company, customer_id))
+
+    connection.commit()
+
+    updated_rows = cursor.rowcount
+
+    connection.close()
+
+    if updated_rows == 0:
+        return None
+
+    return get_customer_by_id(customer_id)
+
+
 if __name__ == "__main__":
     create_customers_table()
 
-    customer = get_customer_by_id(1)
+    updated_customer = update_customer(
+        1,
+        "Ali Updated",
+        "ali.updated@example.com",
+        "0701111111",
+        "Updated Consulting"
+    )
 
-    print(customer)
+    print(updated_customer)
