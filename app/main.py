@@ -4,7 +4,8 @@ from app.database import (
     create_customers_table,
     create_customer,
     get_all_customers,
-    get_customer_by_id
+    get_customer_by_id,
+    update_customer
 )
 from app.schemas import CustomerCreate
 
@@ -52,3 +53,19 @@ def create_customer_endpoint(customer: CustomerCreate):
     new_customer = get_customer_by_id(new_customer_id)
 
     return new_customer
+
+
+@app.put("/customers/{customer_id}")
+def update_customer_endpoint(customer_id: int, customer: CustomerCreate):
+    updated_customer = update_customer(
+        customer_id,
+        customer.name,
+        customer.email,
+        customer.phone,
+        customer.company
+    )
+
+    if updated_customer is None:
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    return updated_customer
