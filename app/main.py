@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from app.database import (
     create_customers_table,
     create_customer,
+    delete_customer,
     get_all_customers,
     get_customer_by_id,
     update_customer
@@ -69,3 +70,13 @@ def update_customer_endpoint(customer_id: int, customer: CustomerCreate):
         raise HTTPException(status_code=404, detail="Customer not found")
 
     return updated_customer
+
+
+@app.delete("/customers/{customer_id}")
+def delete_customer_endpoint(customer_id: int):
+    deleted_customer = delete_customer(customer_id)
+
+    if deleted_customer is None:
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    return deleted_customer
