@@ -1,3 +1,5 @@
+import sqlite3
+
 from fastapi import FastAPI, HTTPException
 
 from app.database import (
@@ -51,32 +53,40 @@ def get_customer(customer_id: int):
 
 @app.post("/customers", status_code=201)
 def create_customer_endpoint(customer: CustomerCreate):
-    new_customer_id = create_customer(
-        customer.name,
-        customer.email,
-        customer.phone,
-        customer.company
-    )
+    try:
+        new_customer_id = create_customer(
+            customer.name,
+            customer.email,
+            customer.phone,
+            customer.company
+        )
 
-    new_customer = get_customer_by_id(new_customer_id)
+        new_customer = get_customer_by_id(new_customer_id)
 
-    return new_customer
+        return new_customer
+
+    except sqlite3.IntegrityError:
+        raise HTTPException(status_code=400, detail="Email already exists")
 
 
 @app.put("/customers/{customer_id}")
 def update_customer_endpoint(customer_id: int, customer: CustomerCreate):
-    updated_customer = update_customer(
-        customer_id,
-        customer.name,
-        customer.email,
-        customer.phone,
-        customer.company
-    )
+    try:
+        updated_customer = update_customer(
+            customer_id,
+            customer.name,
+            customer.email,
+            customer.phone,
+            customer.company
+        )
 
-    if updated_customer is None:
-        raise HTTPException(status_code=404, detail="Customer not found")
+        if updated_customer is None:
+            raise HTTPException(status_code=404, detail="Customer not found")
 
-    return updated_customer
+        return updated_customer
+
+    except sqlite3.IntegrityError:
+        raise HTTPException(status_code=400, detail="Email already exists")
 
 
 @app.delete("/customers/{customer_id}")
