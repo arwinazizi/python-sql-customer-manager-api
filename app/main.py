@@ -6,6 +6,7 @@ from app.database import (
     delete_customer,
     get_all_customers,
     get_customer_by_id,
+    search_customers,
     update_customer
 )
 from app.schemas import CustomerCreate
@@ -29,6 +30,12 @@ def root():
 @app.get("/customers")
 def list_customers():
     customers = get_all_customers()
+    return customers
+
+
+@app.get("/customers/search")
+def search_customers_endpoint(query: str):
+    customers = search_customers(query)
     return customers
 
 
